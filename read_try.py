@@ -1,13 +1,41 @@
 import os
 # infile_original_try = sys.argv[1]
-path_to_try_files = '../../data/try/TRY_513564124162_Loebauer/'
-try_files = ['TRY2045_513564124162_Jahr.dat', 'TRY2045_513564124162_Somm.dat', 'TRY2045_513564124162_Wint.dat']
+
+year="2015"
+variable_number=8
 
 column_headers = "RW      HW MM DD HH     t    p  WR   WG N    x  RF    B    D   A    E IL"
 header_row = column_headers.split()
 
+
+# TRY_513564124162_Loebauer
+path_to_try_files = '../../data/try/TRY_500114084469_Raunheim/'
+
+# try_files = ['TRY2045_500114084469_Jahr.dat', 'TRY2045_500114084469_Somm.dat', 'TRY2045_500114084469_Wint.dat']
+def build_list_of_filenames(reference_year, path):
+    prefix = "TRY" + reference_year + "_"
+    filename = path.split("/")[-2]
+    location_number = filename.split("_")[1]
+    filename_start = prefix + location_number
+    extension = ".dat"
+    first = filename_start + "_Jahr" + extension
+    second= filename_start + "_Somm" + extension
+    third = filename_start + "_Wint" + extension
+    return [first, second, third]
+
+try_files = build_list_of_filenames(year, path_to_try_files)
+path_to_outfile_start = "out/try_Raunheim_" + year + "_" #   temperature.csv"
+
+
 climate_variable_name = ''
 
+# parse file for dates and one variable only
+def times_and_variable_from_file(infile_original_try, column_number):
+    set_climate_variable_name(column_number)
+    return select_columns_from_file(infile_original_try, 2, column_number + 1)
+
+def variable_from_file(infile_original_try, column_number):
+    return select_columns_from_file(infile_original_try, column_number, column_number + 1)
 
 # parse file for dates and temperatures only
 def times_and_temperatures_from_file(infile_original_try):
@@ -56,9 +84,9 @@ def is_part_of_header(line):
 
 
 # READ DATA INTO MEMORY (3 lists)
-data_year = times_and_temperatures_from_file(path_to_try_files + try_files[0])
-data_summ = temperatures_from_file(path_to_try_files + try_files[1])
-data_wint = temperatures_from_file(path_to_try_files + try_files[2])
+data_year = times_and_variable_from_file(path_to_try_files + try_files[0], variable_number)
+data_summ = variable_from_file(path_to_try_files + try_files[1], variable_number)
+data_wint = variable_from_file(path_to_try_files + try_files[2], variable_number)
 
 # PREPARE LINES FOR OUTFILE
 climate_variables_header = ";".join([climate_variable_name + "_Jahr",
@@ -73,8 +101,9 @@ for i, row in enumerate(data_year):
     data_lines.append(line)
 
 # WRITE THE OUTFILE
-path_to_outfile = "out/try.csv"
+path_to_outfile = path_to_outfile_start + climate_variable_name + ".csv"
 os.makedirs(os.path.dirname(path_to_outfile), exist_ok=True)
+print("Writing to outfile ", path_to_outfile)
 with open(path_to_outfile, 'a') as outfile:
     climate_variables = ";".join([climate_variable_name + "_Jahr", climate_variable_name + "_Somm", climate_variable_name + "_Wint"])
     outfile.write(outfile_column_headers + "\n")
