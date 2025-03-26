@@ -1,9 +1,14 @@
+import sys
+
 import matplotlib.pyplot as plt
 import pandas as pd
 
+infile_try_csv = sys.argv[1]
+
+
 # dataframe = pd.read_csv("out/try.csv", sep=";", header=None, names=["time", "temperature_year",
 #                                                                    "temperature_summer", "temperature_winter"])
-dataframe = pd.read_csv("out/try.csv", sep=";")
+dataframe = pd.read_csv(infile_try_csv, sep=";")
 
 
 dataframe.plot(kind='line',
@@ -14,7 +19,11 @@ dataframe.plot(kind='line',
                color=['pink', 'red', 'blue'],
                lw=1
                )
-plt.title('TRY 2045, Loebauer 46')
+
+# plt.title('TRY 2045, Raunheim')
+filename = infile_try_csv.split('/')[-1]
+filename_without_extension = filename.split('.')[0]
+plt.title(filename_without_extension)
 
 # add lines at 20 degrees and at 30 degrees celsius
 plt.axhline(20, color='blue', lw=0.5)
