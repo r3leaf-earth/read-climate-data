@@ -5,7 +5,7 @@ This is a parser for netcdf-files storing climate data for Europe and Germany. I
   * a **Heatwaves** and Cold Spells dataset for Europe (climate projections)
   * a **Temperature Statistics** dataset for Europe (climate projections)
   * **HOSTRADA**, historical data (until present, still updated) for Germany
-  * TRY for Germany with a present and future representative year
+  * **TRY** for Germany with a present and future representative year
 
 The scripts named `read_...` reads from netCDF or other data files, which you have to download from climate data stores. See the section on [prerequisites](#Prerequisites) below for datasets from Copernicus Climate Data Store. NOTE, that they write to outfiles and usually append to them! This is useful for collecting data from monthly datafiles into one outfile containing the data for a whole year.
 
