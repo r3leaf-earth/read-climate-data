@@ -71,8 +71,16 @@ dataset = DerivedDataset(path_to_file, main_variable=variable_name)
 # 51.78195,11.14510 Harz
 # 49.009452/8.400044 Karlsruhe
 # 47.98036,7.90463 Freiburg???
-desired_locations = [(54.09,13.37), (52.40,13.06), (51.37,12.44), (51.78,11.15), (49.01,8.40)]
-location_names = ["Greifswald", "Potsdam", "Leipzig Heiterblick", "Harz", "Karlsruhe"]
+#
+# 51.452181/6.747001 Dusisport, Alte Ruhrorter 14 Duisburg
+# 50.00625991821289, 8.442766189575195 Raunheim
+
+
+desired_locations = [(50.006,8.4428), (51.452,6.747)]
+location_names = ["Raunheim", "Duisport, alte Ruhrorter"]
+
+#desired_locations = [(54.09,13.37), (52.40,13.06), (51.37,12.44), (51.78,11.15), (49.01,8.40)]
+#location_names = ["Greifswald", "Potsdam", "Leipzig Heiterblick", "Harz", "Karlsruhe"]
 
 
 # FIND CLOSEST GRID POINTS
