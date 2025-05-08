@@ -40,6 +40,7 @@
 #############################################################
 import os
 import sys
+import time
 
 import netCDF4
 import numpy as np
@@ -83,19 +84,25 @@ def getclosest_gridpoints_indices(lats, lons, desired_lat, desired_lon):
 print("Searching grid point for location: ", location_lat, location_lon)
 grid_lat_index, grid_lon_index = getclosest_gridpoints_indices(latvals, lonvals, location_lat, location_lon)
 print("Closest grid point found is:", lat[grid_lat_index].round(1), lon[grid_lon_index].round(1))
-
+location_headline = f"For location ({location_lat}, {location_lon}) with closest grid point ({lat[grid_lat_index].round(1)}, {lon[grid_lon_index].round(1)})"
 
 def climate_variable_name_from_filename(path_to_nc_file):
     filename_with_extension = path_to_nc_file.split("/")[-1]
     filename = filename_with_extension.split(".")[0]
     words_in_filename = filename.split("_")
     climate_variable_name = "_".join(words_in_filename[0:3])
+    if climate_variable_name.startswith("CSD_national"):
+        print("Note that cold spell data is present for Baltic States, e.g. Estland")
+        climate_variable_name = "CSD_merged"
     return filename, climate_variable_name
 
 
 infile_name, variable_name = climate_variable_name_from_filename(path_to_file)
 print(variable_name)
-path_to_outfile = "out/heatwaves_or_temp_stats_" + infile_name + ".csv"
+
+
+timestring = time.strftime("%Y%m%d-%H%M%S")
+path_to_outfile = ("out/from" + timestring + "_heatwaves_or_temp_stats_" + infile_name + ".csv")
 
 # HWD_EU_climate(time,lat,lon)
 
@@ -121,6 +128,7 @@ with open(path_to_outfile, 'a+') as outfile:
     print("Writing to file ", path_to_outfile)
     if is_newfile:
         # write column headers
+        outfile.write(location_headline + "\n")
         outfile.write("time; " + variable_name + "\n")
 
     for i, number_of_days in enumerate(heat_days):
